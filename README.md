@@ -12,6 +12,11 @@ See the files in [`doc`](doc) or the [Subsonic Wiki (TODO)](https://github.com/k
 
 Commands are written in POSIX shell syntax and prefixed with `$`.
 
+## Platforms
+
+Tested platforms:
+- Arch Linux x86_64
+
 ## Build
 
 Build Dependencies:
@@ -26,11 +31,6 @@ Build Dependencies:
 ## Run
 
 `$ ./build/subsonic`
-
-## Platforms
-
-Tested platforms:
-- Arch Linux x86_64
 
 ## Licence
 
