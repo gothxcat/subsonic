@@ -8,7 +8,7 @@ Subsonic is a command line tool for embedding and extracting data files split ac
 
 ## Documentation
 
-See the files in [`doc`](doc) or the [Subsonic Wiki (TODO)](https://github.com/kxwiggins/subsonic/wiki).
+See the files in [`doc`](doc).
 
 Commands are written in POSIX shell syntax and prefixed with `$`.
 
@@ -23,6 +23,8 @@ Build Dependencies:
 - `cmake` >=3.1
 - `gcc` >=5
 - `gettext`
+
+`$ git submodule init`
 
 `$ mkdir build`
 
