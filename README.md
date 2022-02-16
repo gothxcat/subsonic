@@ -1,4 +1,4 @@
-# subsonic
+# Subsonic
 
 Subsonic is a command line tool for embedding and extracting data files split across the IDv3 tags of MP3 audio files, written in C++17.
 
@@ -6,22 +6,26 @@ Subsonic is a command line tool for embedding and extracting data files split ac
 
 - `gettext`
 
-## Building
+## Documentation
+
+See the files in [`doc`](doc) or the [Subsonic Wiki (TODO)](https://github.com/kxwiggins/subsonic/wiki).
+
+Commands are written in POSIX shell syntax and prefixed with `$`.
+
+## Build
 
 Build Dependencies:
 - `cmake` >=3.1
 - `gcc` >=5
 - `gettext`
 
-From the root directory, run:
+`$ mkdir build`
 
-`mkdir build && cd build`
+`$ (cd build && cmake .. && cmake --build .)`
 
-`cmake .. && cmake --build .`
+## Run
 
-## Documentation
-
-See the files in [`doc`](doc) or the [Subsonic Wiki (TODO)](https://github.com/kxwiggins/subsonic/wiki).
+`$ ./build/subsonic`
 
 ## Platforms
 
