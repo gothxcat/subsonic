@@ -1,6 +1,6 @@
+#include <cstdlib>
 #include <cstring>
 #include <cstddef>
-#include <cstdarg>
 #include <exception>
 #include <string>
 #include <vector>
@@ -9,6 +9,7 @@
 #include "options.hxx"
 #include "i18n.hxx"
 #include "config.hxx"
+#include "files.hxx"
 
 using namespace std;
 
@@ -72,6 +73,7 @@ bool get_option(const vector<const char*> args, const vector<Option> options, in
                             const char *optarg = args.at(optarg_index);
                             result->args.push_back(optarg);
                             ++optarg_index;
+                            ++*index;
                         }
                     }
                     
@@ -112,10 +114,10 @@ bool get_option(const vector<const char*> args, const vector<Option> options, in
     return false;
 }
 
-void show_help(const string basename)
+void show_help()
 {
-    cout << _("Usage: ") << basename << _(" [OPTION]...") << endl
-            << _("Embed and extract data files split across IDv3 MP3 audio tags.") << endl
+    cout << _("Usage: ") << Files::get_exec_basename() << _(" [OPTION]...") << endl
+            << _("Embed and extract data files split across ID3v2 MP3 audio tags.") << endl
             << endl
             << _("Mandatory arguments for long options are also mandatory for short options.") << endl
             << _("Options:") << endl
@@ -125,9 +127,10 @@ void show_help(const string basename)
             << _("                                              (requires \'--audio-files\')") << endl
             << _("  -a, --audio-files [FILE]...             specify input MP3 file(s)") << endl
             << _("  -o, --output [FILE]...                  specify output MP3 file(s)") << endl
-            << _("  -d, --output-directory [DIRECTORY]...   specify output directory") << endl
-            << _("      --version                           display version information and exit") << endl
-            << _("      --help                              display this help and exit") << endl;
+            << _("  -d, --output-directory [DIRECTORY]      specify output directory") << endl
+            << _("  -v, --verbose                           display verbose output") << endl
+            << _("  -V, --version                           display version information and exit") << endl
+            << _("  -h, --help                              display this help and exit") << endl;
 }
 
 void show_version()

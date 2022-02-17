@@ -9,12 +9,13 @@
 #include "files.hxx"
 #include "options.hxx"
 #include "i18n.hxx"
+#include "embed.hxx"
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
-    const string basename = get_basename(argv[0]);
+    Files::set_exec_basename(get_basename(argv[0]));
 
     /* Initialise locale */
 
@@ -40,7 +41,11 @@ int main(int argc, char **argv)
         argopt(OPT_OUTPUT_DIR_LONG),
         opt(OPT_EXTRACT),
         opt(OPT_EXTRACT_LONG),
+        opt(OPT_VERBOSE),
+        opt(OPT_VERBOSE_LONG),
+        opt(OPT_VERSION),
         opt(OPT_VERSION_LONG),
+        opt(OPT_HELP),
         opt(OPT_HELP_LONG)
     };
 
@@ -55,7 +60,8 @@ int main(int argc, char **argv)
     vector<const char *> data_input;
     vector<const char *> audio_input;
     vector<const char *> output;
-    const char *output_directory;
+    const char *output_directory = nullptr;
+    bool verbose = false;
 
     try
     {
@@ -83,14 +89,18 @@ int main(int argc, char **argv)
                 {
                     output = result.args;
                 }
-                else if (optstr == OPT_VERSION_LONG)
+                else if (optstr == OPT_VERBOSE || optstr == OPT_VERBOSE_LONG)
+                {
+                    verbose = true;
+                }
+                else if (optstr == OPT_VERSION || optstr == OPT_VERSION_LONG)
                 {
                     show_version();
                     return EXIT_SUCCESS;
                 }
-                else if (optstr == OPT_HELP_LONG)
+                else if (optstr == OPT_HELP || optstr == OPT_HELP_LONG)
                 {
-                    show_help(basename);
+                    show_help();
                     return EXIT_SUCCESS;
                 }
             }
@@ -101,25 +111,26 @@ int main(int argc, char **argv)
         switch (e.category)
         {
             case OptionException::Category::INVALID_OPTION:
-                cerr << basename << _(": unrecognised option \'") << e.option_string << _("\'") << endl;
+                cerr << Files::get_exec_basename() << _(": unrecognised option \'") << e.option_string << _("\'") << endl;
                 break;
             case OptionException::Category::NO_ARGUMENT:
-                cerr << basename << _(": option \'") << e.option_string << _("\' requires an argument") << endl;
+                cerr << Files::get_exec_basename() << _(": option \'") << e.option_string << _("\' requires an argument") << endl;
                 break;
         }
 
-        cerr << _("Try \'") << basename << " " << OPT_HELP_LONG << _("\' for more information.") << endl;
+        cerr << _("Try \'") << Files::get_exec_basename() << " " << OPT_HELP_LONG << _("\' for more information.") << endl;
         return 2;
     }
 
     switch (action)
     {
-        case Action::EMBED: // TODO
+        case Action::EMBED:
+            return embed(data_input, audio_input, output, output_directory, true, verbose);
             break;
         case Action::EXTRACT: // TODO
             break;
         default:
-            show_help(basename);
+            show_help();
             break;
     }
 

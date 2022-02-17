@@ -6,6 +6,16 @@
 
 using namespace std;
 
-const string get_basename(const char *filename);
+class Files
+{
+public:
+    static void set_exec_basename(const string basename);
+    static const string get_exec_basename();
+
+private:
+    static string exec_basename;
+};
+
+string get_basename(const char *filename);
 
 #endif

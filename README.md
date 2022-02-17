@@ -1,6 +1,6 @@
 # Subsonic
 
-Subsonic is a command line tool for embedding and extracting data files split across the IDv3 tags of MP3 audio files, written in C++17.
+Subsonic is a command line tool for embedding and extracting data files split across the ID3v2 tags of MP3 audio files, written in C++17.
 
 ## Runtime Dependencies
 

@@ -1,8 +1,22 @@
 #include <string>
 #include <filesystem>
+#include "files.hxx"
+
 using namespace std;
 
-const string get_basename(const char *filename)
+string Files::exec_basename;
+
+void Files::set_exec_basename(const string basename)
 {
-    return (const string)filesystem::path(filename).filename().string();
+    Files::exec_basename = basename;
+}
+
+const string Files::get_exec_basename()
+{
+    return Files::exec_basename;
+}
+
+string get_basename(const char *filename)
+{
+    return filesystem::path(filename).filename().string();
 }

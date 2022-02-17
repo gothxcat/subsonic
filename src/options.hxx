@@ -19,7 +19,11 @@ using namespace std;
 #define OPT_OUTPUT_LONG         _("--output")
 #define OPT_OUTPUT_DIR          _("-d")
 #define OPT_OUTPUT_DIR_LONG     _("--output-directory")
+#define OPT_VERBOSE             _("-v")
+#define OPT_VERBOSE_LONG        _("--verbose")
+#define OPT_VERSION             _("-V")
 #define OPT_VERSION_LONG        _("--version")
+#define OPT_HELP                _("-h")
 #define OPT_HELP_LONG           _("--help")
 
 struct Option
@@ -54,7 +58,7 @@ Option argopt(const char *s);
 
 bool get_option(const vector<const char*> args, const vector<Option> options, int *index, OptionResult *result);
 
-void show_help(const string basename);
+void show_help();
 void show_version();
 
 #endif

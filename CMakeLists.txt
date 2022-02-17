@@ -12,7 +12,8 @@ set(subsonic_CODE_SOURCE_DIR ${subsonic_SOURCE_DIR}/src)
 set(subsonic_SOURCES
     main.cxx
     files.cxx
-    options.cxx)
+    options.cxx
+    embed.cxx)
 
 list(TRANSFORM subsonic_SOURCES PREPEND
     "${subsonic_CODE_SOURCE_DIR}/")
