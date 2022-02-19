@@ -49,12 +49,12 @@ Option argopt(const char *s)
 */
 bool get_option(const vector<const char*> args, const vector<Option> options, int *index, OptionResult *result)
 {
+    *result = {};
     if (*index > -1 && *index < args.size())
     {
         /* Check current argument against each available option */
-        for (size_t i=0; i<options.size(); ++i)
+        for (auto &option : options)
         {
-            Option option = options.at(i);
             if (strcmp(args.at(*index), option.string) == 0)
             {
                 if (option.has_args)
@@ -104,12 +104,10 @@ bool get_option(const vector<const char*> args, const vector<Option> options, in
     else
     {
         *index = -1;
-        *result = {};
         return false;
     }
     
     throw OptionException(args.at(*index), OptionException::Category::INVALID_OPTION);
-    *result = {};
     ++*index;
     return false;
 }
@@ -122,11 +120,10 @@ void show_help()
             << _("Mandatory arguments for long options are also mandatory for short options.") << endl
             << _("Options:") << endl
             << _("  -m, --embed [FILE]...                   embed data from the specified data file(s)") << endl
-            << _("                                              (requires \'--audio-files\' and \'--output\')") << endl
+            << _("                                              (requires '--audio-files')") << endl
             << _("  -x, --extract                           extract data") << endl
-            << _("                                              (requires \'--audio-files\')") << endl
+            << _("                                              (requires '--audio-files')") << endl
             << _("  -a, --audio-files [FILE]...             specify input MP3 file(s)") << endl
-            << _("  -o, --output [FILE]...                  specify output MP3 file(s)") << endl
             << _("  -d, --output-directory [DIRECTORY]      specify output directory") << endl
             << _("  -v, --verbose                           display verbose output") << endl
             << _("  -V, --version                           display version information and exit") << endl

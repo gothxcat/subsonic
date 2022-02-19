@@ -5,8 +5,8 @@
 
 using namespace std;
 
-int embed(vector<const char *> data_input, vector<const char *> audio_input,
-            vector<const char *> output, const char *output_directory,
+int embed(const char *data_file, vector<const char *> audio_files,
+            const char *output_directory,
             bool show_errors, bool verbose);
 
 #endif

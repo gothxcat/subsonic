@@ -23,6 +23,7 @@ Build Dependencies:
 - `cmake` >=3.1
 - `gcc` >=5
 - `gettext`
+- `taglib`
 
 `$ git submodule init`
 

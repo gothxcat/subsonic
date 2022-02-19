@@ -1,8 +1,10 @@
 #include <cstdlib>
 #include <clocale>
+#include <cerrno>
 #include <string>
 #include <vector>
 #include <iostream>
+#include <filesystem>
 #include <libintl.h>
 
 #include "config.hxx"
@@ -12,6 +14,7 @@
 #include "embed.hxx"
 
 using namespace std;
+namespace fs = filesystem;
 
 int main(int argc, char **argv)
 {
@@ -35,8 +38,6 @@ int main(int argc, char **argv)
         argopt(OPT_EMBED_LONG),
         argopt(OPT_AUDIO_FILES),
         argopt(OPT_AUDIO_FILES_LONG),
-        argopt(OPT_OUTPUT),
-        argopt(OPT_OUTPUT_LONG),
         argopt(OPT_OUTPUT_DIR),
         argopt(OPT_OUTPUT_DIR_LONG),
         opt(OPT_EXTRACT),
@@ -56,11 +57,13 @@ int main(int argc, char **argv)
         EXTRACT
     };
 
+    string current_path = fs::current_path().string();
+
     Action action = NONE;
-    vector<const char *> data_input;
-    vector<const char *> audio_input;
-    vector<const char *> output;
-    const char *output_directory = nullptr;
+    const char *data_file_input;
+    vector<const char *> audio_file_input;
+    vector<const char *> file_output;
+    const char *output_directory = current_path.c_str();
     bool verbose = false;
 
     try
@@ -75,7 +78,7 @@ int main(int argc, char **argv)
                 if (optstr == OPT_EMBED || optstr == OPT_EMBED_LONG)
                 {
                     action = Action::EMBED;
-                    data_input = result.args;
+                    data_file_input = result.args.at(0);
                 }
                 else if (optstr == OPT_EXTRACT || optstr == OPT_EXTRACT_LONG)
                 {
@@ -83,11 +86,11 @@ int main(int argc, char **argv)
                 }
                 else if (optstr == OPT_AUDIO_FILES || optstr == OPT_AUDIO_FILES_LONG)
                 {
-                    audio_input = result.args;
+                    audio_file_input = result.args;
                 }
-                else if (optstr == OPT_OUTPUT || optstr == OPT_OUTPUT_LONG)
+                else if (optstr == OPT_OUTPUT_DIR || optstr == OPT_OUTPUT_DIR_LONG)
                 {
-                    output = result.args;
+                    output_directory = result.args.at(0);
                 }
                 else if (optstr == OPT_VERBOSE || optstr == OPT_VERBOSE_LONG)
                 {
@@ -106,32 +109,56 @@ int main(int argc, char **argv)
             }
         }
     }
-    catch (const OptionException& e)
+    catch (const OptionException &e)
     {
         switch (e.category)
         {
             case OptionException::Category::INVALID_OPTION:
-                cerr << Files::get_exec_basename() << _(": unrecognised option \'") << e.option_string << _("\'") << endl;
+                cerr << Files::get_exec_basename() << _(": unrecognised option '") << e.option_string << _("'") << endl;
                 break;
             case OptionException::Category::NO_ARGUMENT:
-                cerr << Files::get_exec_basename() << _(": option \'") << e.option_string << _("\' requires an argument") << endl;
+                cerr << Files::get_exec_basename() << _(": option '") << e.option_string << _("' requires an argument") << endl;
                 break;
         }
 
-        cerr << _("Try \'") << Files::get_exec_basename() << " " << OPT_HELP_LONG << _("\' for more information.") << endl;
-        return 2;
+        cerr << _("Try '") << Files::get_exec_basename() << " " << OPT_HELP_LONG << _("' for more information.") << endl;
+        return ENOENT;
     }
 
-    switch (action)
+    string target_name;
+    try
     {
-        case Action::EMBED:
-            return embed(data_input, audio_input, output, output_directory, true, verbose);
-            break;
-        case Action::EXTRACT: // TODO
-            break;
-        default:
-            show_help();
-            break;
+        switch (action)
+        {
+            case Action::EMBED:
+                target_name = _("embed");
+
+                if (audio_file_input.size() == 0)
+                {
+                    cerr << Files::get_exec_basename() << _(": embed: no audio files specified") << endl;
+                    return ENOENT;
+                }
+
+                return embed(data_file_input, audio_file_input, output_directory, true, verbose);
+
+                break;
+            case Action::EXTRACT: // TODO
+                target_name = _("extract");
+                break;
+            default:
+                show_help();
+                break;
+        }
+    }
+    catch (const NoSuchFileException &e)
+    {
+        cerr << Files::get_exec_basename() << _(": ") << target_name << _(": file '") << e.filename << _("' not found") << endl;
+        return e.code;
+    }
+    catch (const CreateDirectoryException &e)
+    {
+        cerr << Files::get_exec_basename() << _(": ") << target_name << _(": unable to create directory'") << e.filename << _("'") << endl;
+        return e.code;
     }
 
     return EXIT_SUCCESS;

@@ -15,8 +15,6 @@ using namespace std;
 #define OPT_EXTRACT_LONG        _("--extract")
 #define OPT_AUDIO_FILES         _("-a")
 #define OPT_AUDIO_FILES_LONG    _("--audio-files")
-#define OPT_OUTPUT              _("-o")
-#define OPT_OUTPUT_LONG         _("--output")
 #define OPT_OUTPUT_DIR          _("-d")
 #define OPT_OUTPUT_DIR_LONG     _("--output-directory")
 #define OPT_VERBOSE             _("-v")

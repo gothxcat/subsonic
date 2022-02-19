@@ -16,6 +16,24 @@ private:
     static string exec_basename;
 };
 
+class NoSuchFileException: public exception
+{
+public:
+    int code;
+    string filename;
+
+    NoSuchFileException(string filename);
+};
+
+class CreateDirectoryException: public exception
+{
+public:
+    int code;
+    string filename;
+
+    CreateDirectoryException(string filename);
+};
+
 string get_basename(const char *filename);
 
 #endif
